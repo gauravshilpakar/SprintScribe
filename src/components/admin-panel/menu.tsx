@@ -3,18 +3,18 @@
 import { Ellipsis, Pen, Plus, Trash } from "lucide-react";
 import { usePathname } from "next/navigation";
 
-import { cn } from "@/lib/utils";
-import { getMenuList } from "@/lib/menu-list";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
     Tooltip,
-    TooltipTrigger,
     TooltipContent,
     TooltipProvider,
+    TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { useState } from "react";
 import { useDocStore } from "@/hooks/use-saved-docs";
+import { getMenuList } from "@/lib/menu-list";
+import { cn } from "@/lib/utils";
+import { useState } from "react";
 
 interface MenuProps {
     isOpen: boolean | undefined;
@@ -26,35 +26,29 @@ export function Menu({ isOpen }: MenuProps) {
     const menuList = getMenuList(pathname);
 
     const [docValue, setDocValue] = useState("");
-    const { docs, addDoc, removeDoc } = useDocStore();
+    const [key, setKey] = useState<number>(0);
+    const { docs, addDoc, removeDoc, setCurrentDoc } = useDocStore();
 
-    const handleAddDoc = () => {
+    function handleAddDoc() {
         if (docValue.trim()) {
             addDoc(docValue);
             setDocValue(""); // Clear input field
         }
-    };
+    }
+
+    function handleLoadDoc(key: number) {
+        console.log(docs[key]);
+        setKey(key);
+        setCurrentDoc(docs[key]);
+    }
 
     return (
         <>
-            <ScrollArea className="[&>div>div[style]]:!block">
-                <input
-                    type="text"
-                    value={docValue}
-                    onChange={(e) => setDocValue(e.target.value)}
-                    placeholder="Enter document value"
-                />
-                <button onClick={handleAddDoc}>Add Document</button>
-                <nav className="mt-8 h-auto w-full">
-                    <ul
-                        className="flex flex-col items-start space-y-1 px-2"
-                        style={{
-                            scrollbarWidth: "none",
-                            msOverflowStyle: "none",
-                        }}
-                    >
+            <ScrollArea className="[&>div>div[style]]:!block h-full">
+                <nav className="h-auto w-full">
+                    <ul className="flex flex-col items-start gap-1">
                         {isOpen ? (
-                            <p className="text-sm font-medium text-muted-foreground px-4 pb-2 max-w-[248px] truncate">
+                            <p className="text-sm font-medium text-muted-foreground px-4 max-w-[248px] truncate">
                                 Saved Contents
                             </p>
                         ) : (
@@ -71,10 +65,10 @@ export function Menu({ isOpen }: MenuProps) {
                                 </Tooltip>
                             </TooltipProvider>
                         )}
-                        <li className={cn("w-full pt-1")}>
+                        <li className={cn("w-full")}>
                             <Button
                                 variant={"secondary"}
-                                className="w-full gap-2"
+                                className="w-full gap-2 mt-2"
                             >
                                 {isOpen ? " New Document" : ""}
                                 <Plus size={iconSize} />
@@ -90,43 +84,45 @@ export function Menu({ isOpen }: MenuProps) {
                                         <Tooltip delayDuration={100}>
                                             <TooltipTrigger asChild>
                                                 <Button
-                                                    variant={
-                                                        doc.id.length === 0
-                                                            ? "secondary"
-                                                            : "ghost"
+                                                    variant={"ghost"}
+                                                    className={cn(
+                                                        "w-full justify-start h-10",
+                                                        index === key
+                                                            ? "bg-accent/40"
+                                                            : "",
+                                                    )}
+                                                    onClick={() =>
+                                                        handleLoadDoc(index)
                                                     }
-                                                    className="w-full justify-start h-10 mb-1"
-                                                    asChild
                                                 >
-                                                    <Button variant={"ghost"}>
-                                                        <span
-                                                            className={cn(
-                                                                isOpen === false
-                                                                    ? ""
-                                                                    : "mr-4",
-                                                            )}
-                                                        >
-                                                            <Pen
-                                                                size={iconSize}
-                                                            />
-                                                        </span>
-                                                        <p
-                                                            className={cn(
-                                                                "w-44 text-ellipsis text-left overflow-hidden flex align-middle",
-                                                            )}
-                                                        >
-                                                            {doc.value}
-                                                        </p>
-                                                        <Trash
-                                                            size={iconSize}
-                                                            className="h-5 w-5 ml-2 hover:text-destructive"
-                                                            onClick={() =>
-                                                                removeDoc(
-                                                                    doc.id,
-                                                                )
-                                                            }
-                                                        />
-                                                    </Button>
+                                                    <span
+                                                        className={cn(
+                                                            isOpen === false
+                                                                ? ""
+                                                                : "mr-4",
+                                                        )}
+                                                    >
+                                                        <Pen size={iconSize} />
+                                                    </span>
+                                                    <p
+                                                        className={cn(
+                                                            "w-44 text-ellipsis text-left overflow-hidden flex align-middle",
+                                                        )}
+                                                    >
+                                                        {
+                                                            JSON.parse(
+                                                                doc.value,
+                                                            ).blocks[0].data
+                                                                .text
+                                                        }
+                                                    </p>
+                                                    <Trash
+                                                        size={iconSize}
+                                                        className="h-5 w-5 ml-2 hover:text-red-600 z-50"
+                                                        onClick={() =>
+                                                            removeDoc(doc.id)
+                                                        }
+                                                    />
                                                 </Button>
                                             </TooltipTrigger>
                                             {isOpen === false && (

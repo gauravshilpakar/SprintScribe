@@ -1,16 +1,16 @@
 "use client";
 
-import Link from "next/link";
-import Image from "next/image";
-import { MoveRight } from "lucide-react";
 import { ArrowRightIcon } from "@radix-ui/react-icons";
+import { MoveRight } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 import TypingAnimation from "@/components/ui/typing-animation";
 
 export default function HomePage() {
     return (
-        <div className="flex flex-col min-h-screen">
+        <div className="my-24 flex flex-col min-h-screen">
             <div className="min-h-[60vh] container flex items-center justify-center flex-col md:flex-row gap-5">
                 {/* TEXT */}
                 <main>
@@ -33,7 +33,7 @@ export default function HomePage() {
                             </span>
                             <div className="flex w-full items-center justify-center space-x-4 py-4 md:pb-6">
                                 <Button asChild className="">
-                                    <Link href="/uswriter">
+                                    <Link href="/demo">
                                         Demo
                                         <ArrowRightIcon className="ml-2" />
                                     </Link>

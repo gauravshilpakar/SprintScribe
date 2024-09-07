@@ -5,6 +5,15 @@ export interface Blog {
     date: Date;
 }
 
+export interface BlogParams {
+    id: number;
+}
+
+export async function getBlogComponent(params: BlogParams) {
+    const Blog = await import(`@/app/blog/markdown/blog${params.id}.mdx`);
+    return Blog.default;
+}
+
 export function getBlogs(): Blog[] {
     return [
         {

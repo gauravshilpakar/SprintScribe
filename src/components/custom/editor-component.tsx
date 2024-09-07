@@ -1,43 +1,38 @@
-import React, { memo, useEffect, useRef } from "react";
-import EditorJS from "@editorjs/editorjs";
 import { EditorJsTools } from "@/lib/editor-js-tools";
+import EditorJS from "@editorjs/editorjs";
+import { memo, useEffect, useRef } from "react";
+import { TextDataProps } from "../admin-panel/content-layout";
 
-interface Props {
-    data: any;
-    onChange: any;
-    editorblock: any;
+interface EditorComponentProps {
+    data: TextDataProps;
+    editorblock: string; // Updated type to string
 }
 
-const Editor = ({ data, onChange, editorblock }: Props) => {
-    const ref = useRef<any>();
-    //Initialize editorjs
+const Editor = ({ data, editorblock }: EditorComponentProps) => {
+    const ref = useRef<any>(null); // More specific typing
     useEffect(() => {
-        //Initialize editorjs if we don't have a reference
         if (!ref.current) {
             const editor = new EditorJS({
                 holder: editorblock,
-
+                placeholder: "Start writing...",
                 tools: EditorJsTools,
                 data: data,
-                async onChange(
-                    api: { saver: { save: () => any } },
-                    event: any,
-                ) {
-                    const data = await api.saver.save();
-                    onChange(data);
+                onChange: async () => {
+                    const content = await editor.saver.save();
                 },
             });
             ref.current = editor;
         }
 
-        //Add a return function to handle cleanup
         return () => {
             if (ref.current && ref.current.destroy) {
                 ref.current.destroy();
+                ref.current = null;
             }
         };
-    }, []);
-    return <div id={editorblock} />;
+    }, [data, editorblock]); // Reinitialize editor when data changes
+
+    return <div id={editorblock} className="bg-transparent min-h-full" />;
 };
 
 export default memo(Editor);

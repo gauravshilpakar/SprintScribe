@@ -1,16 +1,15 @@
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import {
     Card,
-    CardHeader,
-    CardTitle,
     CardDescription,
     CardFooter,
+    CardHeader,
+    CardTitle,
 } from "@/components/ui/card";
+import { dateToLocaleString } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
-import { Blog } from "./getBlogsList";
-import { dateToLocaleString } from "@/lib/utils";
+import { Blog } from "./get-blogs";
 
 function BlogListItem(props: Blog) {
     return (

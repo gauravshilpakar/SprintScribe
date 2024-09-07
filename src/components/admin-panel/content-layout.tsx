@@ -1,184 +1,51 @@
 "use client";
 
-import { useState } from "react";
-import EditorComponent from "../custom/editor-component";
-import { Card, CardContent } from "../ui/card";
+import { useDocStore } from "@/hooks/use-saved-docs";
+import dynamic from "next/dynamic";
+import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 
-interface ContentLayoutProps {
-    title: string;
-    children: React.ReactNode;
+const EditorComponent = dynamic(() => import("../custom/editor-component"), {
+    ssr: false,
+});
+
+export interface TextDataProps {
+    time: Date;
+    blocks: any[];
 }
 
-// Initial Data
-const INITIAL_DATA = {
-    time: new Date().getTime(),
-    blocks: [
-        {
-            type: "header",
-            data: {
-                text: "This is my awesome editor!",
-                level: 1,
-            },
-        },
-        {
-            type: "header",
-            data: {
-                text: "This is my awesome editor!",
-                level: 1,
-            },
-        },
-        {
-            type: "header",
-            data: {
-                text: "This is my awesome editor!",
-                level: 1,
-            },
-        },
-        {
-            type: "header",
-            data: {
-                text: "This is my awesome editor!",
-                level: 1,
-            },
-        },
-        {
-            type: "header",
-            data: {
-                text: "This is my awesome editor!",
-                level: 1,
-            },
-        },
-        {
-            type: "header",
-            data: {
-                text: "This is my awesome editor!",
-                level: 1,
-            },
-        },
-        {
-            type: "header",
-            data: {
-                text: "This is my awesome editor!",
-                level: 3,
-            },
-        },
-        {
-            type: "header",
-            data: {
-                text: "This is my awesome editor!",
-                level: 1,
-            },
-        },
-        {
-            type: "header",
-            data: {
-                text: "This is my awesome editor!",
-                level: 1,
-            },
-        },
-        {
-            type: "header",
-            data: {
-                text: "This is my awesome editor!",
-                level: 1,
-            },
-        },
-        { type: "paragraph" },
-        { type: "paragraph" },
-        { type: "paragraph" },
-        { type: "paragraph" },
-        { type: "paragraph" },
-        { type: "paragraph" },
-        { type: "paragraph" },
-        { type: "paragraph" },
-        { type: "paragraph" },
-        { type: "paragraph" },
-        { type: "paragraph" },
-        { type: "paragraph" },
-        { type: "paragraph" },
-        { type: "paragraph" },
-        { type: "paragraph" },
-        { type: "paragraph" },
-        { type: "paragraph" },
-        { type: "paragraph" },
-        { type: "paragraph" },
-        { type: "paragraph" },
-        { type: "paragraph" },
-        { type: "paragraph" },
-        { type: "paragraph" },
-        {
-            type: "header",
-            data: {
-                text: "This is my awesome editor!",
-                level: 1,
-            },
-        },
-        {
-            type: "header",
-            data: {
-                text: "This is my awesome editor!",
-                level: 1,
-            },
-        },
-        {
-            type: "header",
-            data: {
-                text: "This is my awesome editor!",
-                level: 1,
-            },
-        },
-        {
-            type: "header",
-            data: {
-                text: "This is my awesome editor!",
-                level: 1,
-            },
-        },
-        {
-            type: "header",
-            data: {
-                text: "This is my awesome editor!",
-                level: 1,
-            },
-        },
-    ],
-};
+const NEW_DATA: TextDataProps = { time: new Date(), blocks: [] };
 
-export function ContentLayout({ title, children }: ContentLayoutProps) {
-    const [data, setData] = useState(INITIAL_DATA);
+export function ContentLayout() {
+    const { docs, addDoc, removeDoc, currentDoc } = useDocStore();
+    const [data, setData] = useState<TextDataProps>(
+        currentDoc?.value && JSON.parse(currentDoc.value),
+    );
+
+    useEffect(() => {
+        if (currentDoc && currentDoc.value) {
+            setData(JSON.parse(currentDoc.value));
+        } else {
+            setData(NEW_DATA); // Default to NEW_DATA if no currentDoc
+        }
+    }, [currentDoc]);
+
+    const handleAddDoc = () => {
+        if (JSON.stringify(data).trim() && data?.blocks.length) {
+            addDoc(JSON.stringify(data));
+        }
+    };
     return (
-        <div className="container p-10 m-10 sm:px-8 rounded-md mx-auto bg-white shadow-sm dark:bg-background dark:shadow-muted">
-            <EditorComponent
-                data={data}
-                onChange={setData}
-                editorblock="editorjs-container"
-            />
+        <div className="container p-10 m-10 sm:px-8 rounded-md mx-auto flex-1 overflow-y-auto">
+            {data && (
+                <EditorComponent data={data} editorblock="editorjs-container" />
+            )}
             <Button
-                className="savebtn"
-                onClick={() => {
-                    alert(JSON.stringify(data));
-                }}
+                onClick={() => handleAddDoc()}
+                className="fixed bottom-5 right-5"
             >
                 Save
             </Button>
-            {/*  
-            <Card className="rounded-lg border-none mt-6 h-full flex">
-                <CardContent className="p-5 h-full">
-                    <div className="min-h-full w-full">
-                        <div className="flex flex-col items-center justify-center w-full">
-                            <div className="editor w-full justify-center">
-                                
-                            </div>
-                        </div>
-                    </div>
-                    {/* <div className="flex justify-center items-center min-h-[calc(100vh-70px-20px-24px-56px-48px)]">
-                        <div className="flex flex-col relative">HELLO</div>
-                    </div> 
-                </CardContent>
-            </Card>
-
-            */}
         </div>
     );
 }

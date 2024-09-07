@@ -1,4 +1,4 @@
-import { Users, Settings, LucideIcon, Pen } from "lucide-react";
+import { LucideIcon, Pen, Settings, Users } from "lucide-react";
 
 type Submenu = {
     href: string;

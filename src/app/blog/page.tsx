@@ -1,12 +1,11 @@
-import React from "react";
-import BlogItem from "./blog-list-item";
-import { getBlogs } from "./getBlogsList";
 import BackToTop from "@/components/custom/back-to-top";
+import BlogItem from "./blog-list-item";
+import { getBlogs } from "./get-blogs";
 
 function BlogList() {
     const blogs = getBlogs();
     return (
-        <div className="container md:px-20 lg:p-50">
+        <div className="my-24 container md:px-20 lg:p-50">
             <h1 className="text-3xl p-5 font-bold leading-tight tracking-tighter md:text-5xl lg:leading-[1.1]">
                 Blog
             </h1>

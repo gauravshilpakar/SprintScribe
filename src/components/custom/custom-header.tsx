@@ -1,12 +1,12 @@
-import { BookOpenText, BeerIcon } from "lucide-react";
-import { ModeToggle } from "../mode-toggle";
-import { Button } from "../ui/button";
+import { BeerIcon, BookOpenText } from "lucide-react";
 import Link from "next/link";
 import { SheetMenu } from "../admin-panel/sheet-menu";
+import { ModeToggle } from "../mode-toggle";
+import { Button } from "../ui/button";
 
 export default function CustomHeader() {
     return (
-        <header className="z-[50] sticky top-0 w-full bg-background/95 border-b backdrop-blur-sm dark:bg-black/[0.6] border-border/40">
+        <header className="z-[50] fixed top-0 w-full bg-background/95 border-b backdrop-blur-sm dark:bg-black/[0.6] border-border">
             <div className="container h-14 flex items-center gap-5">
                 <SheetMenu />
 

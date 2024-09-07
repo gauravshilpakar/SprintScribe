@@ -2,9 +2,8 @@ import { Oxygen } from "next/font/google";
 
 import "./globals.css";
 
-import { ThemeProvider } from "@/providers/theme-provider";
-import FooterCustom from "@/components/custom/custom-footer";
 import CustomHeader from "@/components/custom/custom-header";
+import { ThemeProvider } from "@/providers/theme-provider";
 
 // export const metadata: Metadata = {
 //     metadataBase: new URL(
@@ -47,7 +46,11 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <html lang="en" suppressHydrationWarning className="scroll-smooth">
+        <html
+            lang="en"
+            suppressHydrationWarning
+            className="scroll-smooth overscroll-none !dark:text-red-700"
+        >
             <body className={fontFamily.className}>
                 <ThemeProvider
                     attribute="class"
@@ -56,7 +59,7 @@ export default function RootLayout({
                 >
                     <CustomHeader />
                     {children}
-                    <FooterCustom />
+                    {/* <FooterCustom /> */}
                 </ThemeProvider>
             </body>
         </html>
