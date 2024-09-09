@@ -1,6 +1,3 @@
 {
-    "extends": ["next", "prettier"],
-    "rules": {
-        "no-unused-declaration": true
-    }
+    "extends": ["next", "prettier"]
 }

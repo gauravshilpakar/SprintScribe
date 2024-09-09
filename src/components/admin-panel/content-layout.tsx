@@ -1,13 +1,9 @@
 "use client";
 
 import { useDocStore } from "@/hooks/use-saved-docs";
-import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
+import TiptapEditor from "../custom/tiptap-editor";
 import { Button } from "../ui/button";
-
-const EditorComponent = dynamic(() => import("../custom/editor-component"), {
-    ssr: false,
-});
 
 export interface TextDataProps {
     time: Date;
@@ -37,13 +33,8 @@ export function ContentLayout() {
     };
     return (
         <div className="container p-10 m-10 sm:px-8 rounded-md mx-auto flex-1 overflow-y-auto">
-            {data && (
-                <EditorComponent data={data} editorblock="editorjs-container" />
-            )}
-            <Button
-                onClick={() => handleAddDoc()}
-                className="fixed bottom-5 right-5"
-            >
+            {data && <TiptapEditor />}
+            <Button onClick={handleAddDoc} className="fixed bottom-5 right-5">
                 Save
             </Button>
         </div>
