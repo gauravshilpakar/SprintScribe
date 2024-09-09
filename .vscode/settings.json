@@ -1,5 +1,6 @@
 {
     "prettier.singleQuote": false,
     "prettier.trailingComma": "none",
-    "codium.codeCompletion.enable": true
+    "codium.codeCompletion.enable": true,
+    "tailwindCSS.experimental.classRegex": ["class:\\s*?[\"'`]([^\"'`]*).*?,"]
 }

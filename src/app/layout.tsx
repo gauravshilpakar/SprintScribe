@@ -49,7 +49,7 @@ export default function RootLayout({
         <html
             lang="en"
             suppressHydrationWarning
-            className="scroll-smooth overscroll-none !dark:text-red-700"
+            className="scroll-smooth overscroll-none"
         >
             <body className={fontFamily.className}>
                 <ThemeProvider
