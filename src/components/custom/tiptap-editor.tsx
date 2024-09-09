@@ -77,7 +77,7 @@ export default function TiptapEditor() {
         autofocus: true,
         editorProps: {
             attributes: {
-                class: "leading-tight prose mx-auto focus:outline-none",
+                class: "leading-tight prose dark:prose-invert mx-auto focus:outline-none",
             },
         },
         content: contentValue,
