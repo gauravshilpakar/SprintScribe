@@ -3,14 +3,14 @@ import { createJSONStorage, persist } from "zustand/middleware";
 
 interface useSidebarToggleStore {
     isOpen: boolean;
-    setIsOpen: () => void;
+    setIsOpen(): void;
 }
 
 export const useSidebarToggle = create(
     persist<useSidebarToggleStore>(
         (set, get) => ({
             isOpen: true,
-            setIsOpen: () => {
+            setIsOpen() {
                 set({ isOpen: !get().isOpen });
             },
         }),

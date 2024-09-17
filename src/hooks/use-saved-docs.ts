@@ -1,41 +1,39 @@
+import TiptapDataProps from "@/components/tiptap/tiptap-data";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
-export interface Doc {
-    id: string;
-    value: string;
-    lastUpdated: Date;
-}
-
 export interface DocState {
-    docs: Doc[];
-    currentDoc: Doc | null;
-    setCurrentDoc: (value: Doc) => void;
-    addDoc: (value: string) => void;
-    removeDoc: (id: string) => void;
+    docs: TiptapDataProps[];
+    currentDoc: TiptapDataProps | null;
+    updateDoc(value: TiptapDataProps): void;
+    setCurrentDoc(value: TiptapDataProps): void;
+    addDoc(value: TiptapDataProps): void;
+    removeDoc(id: string): void;
 }
 
 export const useDocStore = create<DocState>()(
     persist(
         (set) => ({
             docs: [],
-            addDoc: (value: string) =>
+            addDoc(value: TiptapDataProps) {
                 set((state) => ({
-                    docs: [
-                        ...state.docs,
-                        {
-                            id: crypto.randomUUID().toString(),
-                            value: value,
-                            lastUpdated: new Date(Date.now()),
-                        },
-                    ],
-                })),
-            removeDoc: (id: string) =>
+                    docs: [...state.docs, value],
+                }));
+            },
+            updateDoc(value: TiptapDataProps) {
+                set((state) => ({
+                    docs: [...state.docs, value],
+                }));
+            },
+            removeDoc(id: string) {
                 set((state) => ({
                     docs: state.docs.filter((doc) => doc.id !== id),
-                })),
+                }));
+            },
             currentDoc: null,
-            setCurrentDoc: (doc: Doc) => set((state) => ({ currentDoc: doc })),
+            setCurrentDoc(doc: TiptapDataProps) {
+                set(() => ({ currentDoc: doc }));
+            },
         }),
         {
             name: "doc-storage", // Key in local storage

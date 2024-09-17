@@ -1,47 +1,46 @@
 "use client";
 
-import { Color } from "@tiptap/extension-color";
-import Document from "@tiptap/extension-document";
-import Dropcursor from "@tiptap/extension-dropcursor";
-import Strike from "@tiptap/extension-strike";
+import PlaceHolder from "@tiptap/extension-placeholder";
 import Table from "@tiptap/extension-table";
 import TableCell from "@tiptap/extension-table-cell";
 import TableHeader from "@tiptap/extension-table-header";
 import TableRow from "@tiptap/extension-table-row";
 import TaskItem from "@tiptap/extension-task-item";
 import TaskList from "@tiptap/extension-task-list";
-import Text from "@tiptap/extension-text";
 import TextStyle from "@tiptap/extension-text-style";
 import { BubbleMenu, EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import { useEffect } from "react";
+import TextDataProps from "./tiptap-data";
 
-export default function TiptapEditor() {
+export default function TiptapEditor({
+    params,
+    setContent,
+}: {
+    params: TextDataProps;
+    setContent: (newValue: string) => void;
+}) {
+    console.log("log on every editor change");
     const contentValue =
-        "<div><h2>User Story</h2><p>Given</p><ul><li><p>A customer</p></li></ul><p>When</p><ul><li><p>An item is added to cart</p></li></ul><p>Then</p><ul><li><p>Price of cart must be updated</p></li></ul></div>";
+        "<div><h2>User Story</h2><p><b>Given</b></p><ul><li><p>A customer</p></li></ul><p>When</p><ul><li><p>An item is added to cart</p></li></ul><p>Then</p><ul><li><p>Price of cart must be updated</p></li></ul></div>";
 
     const editor = useEditor({
+        immediatelyRender: false,
         extensions: [
+            PlaceHolder.configure({
+                placeholder: "Start Writing...",
+            }),
             StarterKit.configure({
                 heading: {
                     levels: [1, 2, 3],
-                    HTMLAttributes: {
-                        // class
-                    },
-                },
-                paragraph: {
-                    HTMLAttributes: {
-                        class: "my-1",
-                    },
                 },
                 orderedList: {
                     HTMLAttributes: {
-                        class: "",
+                        class: "m-2",
                     },
                 },
                 bulletList: {
                     HTMLAttributes: {
-                        class: "my-1",
+                        class: "m-2",
                     },
                 },
                 listItem: {
@@ -49,30 +48,39 @@ export default function TiptapEditor() {
                         class: "m-0 p-0",
                     },
                 },
+                bold: {
+                    HTMLAttributes: {
+                        class: "font-extrabold",
+                    },
+                },
+                paragraph: {
+                    HTMLAttributes: {
+                        class: "my-1",
+                    },
+                },
             }),
-            Document,
-            Text,
-            Strike,
             Table.configure({
                 resizable: true,
             }),
             TableRow,
             TableHeader,
             TableCell,
-            TaskList,
+            TaskList.configure({
+                HTMLAttributes: {
+                    class: "flex flex-col gap-0",
+                },
+            }),
             TaskItem.configure({
                 nested: true,
                 HTMLAttributes: {
-                    class: "flex flex-1 flex-row place-items-center items-center gap-2",
+                    class: "flex flex-row flex-1 gap-2 items-center",
                 },
             }),
-            Dropcursor,
             TextStyle.configure({
                 HTMLAttributes: {
                     class: "dark:text-foreground",
                 },
             }),
-            Color,
         ],
         autofocus: true,
         editorProps: {
@@ -80,14 +88,12 @@ export default function TiptapEditor() {
                 class: "leading-tight prose dark:prose-invert mx-auto focus:outline-none",
             },
         },
-        content: contentValue,
+        content: params.value,
+        onUpdate: ({ editor }) => {
+            console.log(editor.getJSON());
+            setContent(editor.getHTML());
+        },
     });
-
-    useEffect(() => {
-        editor?.commands.setColor("text-background");
-
-        return () => {};
-    }, []);
 
     return (
         <>

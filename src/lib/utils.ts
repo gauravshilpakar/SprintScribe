@@ -6,6 +6,9 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function dateToLocaleString(props: Date) {
+    console.log(props);
+    if (!props) return "";
+    console.log(typeof props);
     return props.toLocaleDateString("en-US", {
         year: "numeric",
         month: "long",

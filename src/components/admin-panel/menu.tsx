@@ -13,8 +13,9 @@ import {
 } from "@/components/ui/tooltip";
 import { useDocStore } from "@/hooks/use-saved-docs";
 import { getMenuList } from "@/lib/menu-list";
-import { cn } from "@/lib/utils";
-import { useState } from "react";
+import { cn, stringDateToLocaleString } from "@/lib/utils";
+import { useEffect, useState } from "react";
+import TiptapDataProps from "../tiptap/tiptap-data";
 
 interface MenuProps {
     isOpen: boolean | undefined;
@@ -25,22 +26,20 @@ export function Menu({ isOpen }: MenuProps) {
     const pathname = usePathname();
     const menuList = getMenuList(pathname);
 
-    const [docValue, setDocValue] = useState("");
-    const [key, setKey] = useState<number>(0);
+    const [docValue, setDocValue] = useState<TiptapDataProps>();
     const { docs, addDoc, removeDoc, setCurrentDoc } = useDocStore();
-
-    function handleAddDoc() {
-        if (docValue.trim()) {
-            addDoc(docValue);
-            setDocValue(""); // Clear input field
-        }
-    }
+    const [key, setKey] = useState<number>(0);
+    const [docsList, setDocsList] = useState<TiptapDataProps[]>(docs);
 
     function handleLoadDoc(key: number) {
         console.log(docs[key]);
         setKey(key);
         setCurrentDoc(docs[key]);
     }
+
+    useEffect(() => {
+        setDocsList(docs);
+    }, [docs]);
 
     return (
         <>
@@ -74,7 +73,7 @@ export function Menu({ isOpen }: MenuProps) {
                                 <Plus size={iconSize} />
                             </Button>
                         </li>
-                        {docs.map((doc, index) => (
+                        {docsList.map((doc, index) => (
                             <li
                                 className={cn("w-full", doc.id ? "pt-1" : "")}
                                 key={index}
@@ -86,7 +85,7 @@ export function Menu({ isOpen }: MenuProps) {
                                                 <Button
                                                     variant={"ghost"}
                                                     className={cn(
-                                                        "w-full justify-start h-10",
+                                                        "w-full justify-center h-10",
                                                         index === key
                                                             ? "bg-accent/40"
                                                             : "",
@@ -104,34 +103,46 @@ export function Menu({ isOpen }: MenuProps) {
                                                     >
                                                         <Pen size={iconSize} />
                                                     </span>
-                                                    <p
-                                                        className={cn(
-                                                            "w-44 text-ellipsis text-left overflow-hidden flex align-middle",
-                                                        )}
-                                                    >
-                                                        {
-                                                            JSON.parse(
-                                                                doc.value,
-                                                            ).blocks[0].data
-                                                                .text
-                                                        }
-                                                    </p>
-                                                    <Trash
-                                                        size={iconSize}
-                                                        className="h-5 w-5 ml-2 hover:text-red-600 z-50"
-                                                        onClick={() =>
-                                                            removeDoc(doc.id)
-                                                        }
-                                                    />
+                                                    {isOpen && (
+                                                        <>
+                                                            <div
+                                                                className={cn(
+                                                                    "w-44 text-ellipsis text-left overflow-hidden flex align-middle",
+                                                                )}
+                                                                dangerouslySetInnerHTML={{
+                                                                    __html: doc.value
+                                                                        ? doc.value
+                                                                        : "",
+                                                                }}
+                                                            />
+                                                            <Trash
+                                                                size={iconSize}
+                                                                className="h-5 w-5 ml-2 hover:text-red-600 z-50"
+                                                                onClick={() =>
+                                                                    removeDoc(
+                                                                        doc.id,
+                                                                    )
+                                                                }
+                                                            />
+                                                        </>
+                                                    )}
                                                 </Button>
                                             </TooltipTrigger>
                                             {isOpen === false && (
                                                 <TooltipContent side="right">
-                                                    <span className="!text-md truncate">
-                                                        {doc.value}{" "}
-                                                    </span>
+                                                    <span
+                                                        className="!text-md truncate"
+                                                        dangerouslySetInnerHTML={{
+                                                            __html: doc.value
+                                                                ? doc.value
+                                                                : "",
+                                                        }}
+                                                    />
                                                     Last Updated:
-                                                    {doc.lastUpdated.toString()}
+                                                    {doc?.time &&
+                                                        stringDateToLocaleString(
+                                                            doc.time.toString(),
+                                                        )}
                                                 </TooltipContent>
                                             )}
                                         </Tooltip>
