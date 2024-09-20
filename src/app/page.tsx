@@ -146,8 +146,11 @@ export default function HomePage() {
                             Stripe invoices without ZenVoice
                         </h3>
                         <ul className="list-disc list-inside space-y-1.5 ">
-                            {withoutSprintScribe.map((value) => (
-                                <li className="flex gap-2 items-center">
+                            {withoutSprintScribe.map((value, index) => (
+                                <li
+                                    key={index}
+                                    className="flex gap-2 items-center"
+                                >
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
                                         viewBox="0 0 16 16"
@@ -166,8 +169,11 @@ export default function HomePage() {
                             Stripe invoices + ZenVoice
                         </h3>
                         <ul className="list-disc list-inside space-y-1.5 ">
-                            {withSprintScribe.map((value) => (
-                                <li className="flex gap-2 items-center">
+                            {withSprintScribe.map((value, index) => (
+                                <li
+                                    key={index}
+                                    className="flex gap-2 items-center"
+                                >
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
                                         viewBox="0 0 16 16"
