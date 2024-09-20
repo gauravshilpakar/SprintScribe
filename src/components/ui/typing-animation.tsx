@@ -1,23 +1,20 @@
 import { TypeAnimation } from "react-type-animation";
 
-import React from "react";
-import { cn } from "@/lib/utils";
-
 function TypingAnimation() {
     return (
         <TypeAnimation
             sequence={[
-                "Developer", // Types 'One'
-                1500, // Waits 1s
-                "Product Owner", // Deletes 'One' and types 'Two'
-                1500, // Waits 2s
-                "Scrum Master", // Types 'Three' without deleting 'Two'
-                1500, // Waits 2s
-                "Team Member", // Types 'Three' without deleting 'Two'
+                "Developer?",
                 1500,
-                "UI/UX Designer", // Types 'Three' without deleting 'Two'
+                "Product Owner?",
                 1500,
-                "Tester", // Types 'Three' without deleting 'Two'
+                "Scrum Master?",
+                1500,
+                "Team Member?",
+                1500,
+                "UI/UX Designer?",
+                1500,
+                "Tester?",
                 1500,
                 () => {
                     console.log("Sequence completed");
@@ -26,7 +23,7 @@ function TypingAnimation() {
             cursor={true}
             repeat={Infinity}
             className={
-                "inline-block bg-yellow-400 text-foreground dark:text-background"
+                "inline-block px-5 py-1 bg-emerald-500 text-foreground dark:text-background"
             }
         />
     );

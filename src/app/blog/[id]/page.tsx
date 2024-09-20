@@ -29,7 +29,10 @@ async function BlogPage({ params }: { params: BlogParams }) {
                         (item, index) =>
                             index != params.id && (
                                 <li key={index}>
-                                    <Button variant="link">
+                                    <Button
+                                        variant="link"
+                                        className="text-accent-background"
+                                    >
                                         <Link href={`/blog/${item.id}`}>
                                             {item.title}
                                         </Link>

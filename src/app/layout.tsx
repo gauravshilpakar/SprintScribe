@@ -1,7 +1,8 @@
-import { Oxygen } from "next/font/google";
+import { Open_Sans } from "next/font/google";
 
 import "./globals.css";
 
+import CustomFooter from "@/components/custom/custom-footer";
 import CustomHeader from "@/components/custom/custom-header";
 import { ThemeProvider } from "@/providers/theme-provider";
 
@@ -34,10 +35,8 @@ import { ThemeProvider } from "@/providers/theme-provider";
 //     },
 // };
 
-const fontFamily = Oxygen({
-    weight: "400",
+const fontFamily = Open_Sans({
     subsets: ["latin"],
-    display: "swap",
 });
 
 export default function RootLayout({
@@ -49,7 +48,7 @@ export default function RootLayout({
         <html
             lang="en"
             suppressHydrationWarning
-            className="scroll-smooth overscroll-none"
+            className="scroll-smooth overscroll-none leading-relaxed"
         >
             <body className={fontFamily.className}>
                 <ThemeProvider
@@ -59,7 +58,7 @@ export default function RootLayout({
                 >
                     <CustomHeader />
                     {children}
-                    {/* <FooterCustom /> */}
+                    <CustomFooter />
                 </ThemeProvider>
             </body>
         </html>

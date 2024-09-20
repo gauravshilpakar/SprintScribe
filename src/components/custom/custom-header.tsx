@@ -6,7 +6,7 @@ import { Button } from "../ui/button";
 
 export default function CustomHeader() {
     return (
-        <header className="z-[50] fixed top-0 w-full bg-background/95 border-b backdrop-blur-sm dark:bg-black/[0.6] border-border">
+        <header className="z-[50] top-0 w-full bg-background/95 border-b backdrop-blur-sm dark:bg-black/[0.6] border-border">
             <div className="container h-14 flex items-center gap-5">
                 <SheetMenu />
 
